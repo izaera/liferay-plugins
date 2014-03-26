@@ -87,9 +87,6 @@ public class LocalizedValue implements Map<Locale, String> {
 	}
 
 	public String getLocalizationXml() {
-
-		// TODO: use LocalizationImpl ???
-
 		XMLStreamWriter xmlStreamWriter = null;
 
 		try {
