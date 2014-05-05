@@ -14,6 +14,8 @@
 
 package com.liferay.portal.settings.impl;
 
+import com.liferay.portal.settings.archive.ArchivedSettings;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
@@ -21,18 +23,20 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.PortletConstants;
+import com.liferay.portal.model.PortletItem;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.PortalPreferencesLocalServiceUtil;
+import com.liferay.portal.service.PortletItemLocalServiceUtil;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.settings.PortletPreferencesSettings;
 import com.liferay.portal.settings.Settings;
 import com.liferay.portal.settings.SettingsFactory;
 import com.liferay.portal.util.PortletKeys;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.portlet.PortletPreferences;
 
 /**
