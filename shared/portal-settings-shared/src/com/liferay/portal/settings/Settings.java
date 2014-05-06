@@ -16,6 +16,8 @@ package com.liferay.portal.settings;
 
 import java.io.IOException;
 
+import java.util.Set;
+
 import javax.portlet.ValidatorException;
 
 /**
@@ -26,6 +28,14 @@ import javax.portlet.ValidatorException;
 public interface Settings {
 
 	public Settings getDefaultSettings();
+
+	/**
+	 * Get the list of keys with a valid value. The set does NOT include the
+	 * settings for which there's no explicit value even if they have a valid
+	 * default value.
+	 * @return
+	 */
+	public Set<String> getNames();
 
 	public String getValue(String key, String defaultValue);
 
