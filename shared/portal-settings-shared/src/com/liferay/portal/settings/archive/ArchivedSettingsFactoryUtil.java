@@ -16,20 +16,21 @@ package com.liferay.portal.settings.archive;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import java.util.List;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
+import java.util.List;
 
 /**
  * @author Iván Zaera
  */
 public class ArchivedSettingsFactoryUtil {
 
-	public static List<ArchivedSettings> getArchivedSettingsList(
-			long groupId, String portletId)
+	public static ArchivedSettings getArchivedSettings(
+			long groupId, String portletId, String name)
 		throws PortalException, SystemException {
-		
-		return getArchivedSettingsFactory().getArchivedSettingsList(
-			groupId, portletId);
+
+		return getArchivedSettingsFactory().getArchivedSettings(
+			groupId, portletId, name);
 	}
 
 	public static ArchivedSettingsFactory getArchivedSettingsFactory() {
@@ -39,17 +40,17 @@ public class ArchivedSettingsFactoryUtil {
 		return _archivedSettingsFactory;
 	}
 
-	public static ArchivedSettings getArchivedSettings(
-			long groupId, String portletId, String name)
+	public static List<ArchivedSettings> getArchivedSettingsList(
+			long groupId, String portletId)
 		throws PortalException, SystemException {
-		
-		return getArchivedSettingsFactory().getArchivedSettings(
-			groupId, portletId, name);
+
+		return getArchivedSettingsFactory().getArchivedSettingsList(
+			groupId, portletId);
 	}
 
 	public void setArchivedSettingsFactory(
 		ArchivedSettingsFactory archivedSettingsFactory) {
-		
+
 		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_archivedSettingsFactory = archivedSettingsFactory;

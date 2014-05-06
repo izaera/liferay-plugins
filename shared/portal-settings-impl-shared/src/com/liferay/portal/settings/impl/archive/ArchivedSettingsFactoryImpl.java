@@ -14,31 +14,18 @@
 
 package com.liferay.portal.settings.impl.archive;
 
-import com.liferay.portal.settings.archive.ArchivedSettingsFactory;
-
-import com.liferay.portal.settings.archive.ArchivedSettings;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.Layout;
-import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.PortletItem;
-import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.PortalPreferencesLocalServiceUtil;
+import com.liferay.portal.model.PortletPreferences;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.PortletItemLocalServiceUtil;
-import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
-import com.liferay.portal.settings.PortletPreferencesSettings;
-import com.liferay.portal.settings.Settings;
-import com.liferay.portal.settings.SettingsFactory;
-import com.liferay.portal.util.PortletKeys;
+import com.liferay.portal.settings.archive.ArchivedSettings;
+import com.liferay.portal.settings.archive.ArchivedSettingsFactory;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.portlet.PortletPreferences;
 
 /**
  * @author Iván Zaera
@@ -47,22 +34,45 @@ import javax.portlet.PortletPreferences;
 public class ArchivedSettingsFactoryImpl implements ArchivedSettingsFactory {
 
 	@Override
+	public ArchivedSettings getArchivedSettings(
+			long groupId, String portletId, String name)
+		throws PortalException, SystemException {
+
+		List<ArchivedSettings> archivedSettingsList = getArchivedSettingsList(
+			groupId, portletId);
+
+		for (ArchivedSettings archivedSettings : archivedSettingsList) {
+			if (archivedSettings.getName().equals(name)) {
+				return archivedSettings;
+			}
+		}
+
+		long userId = PrincipalThreadLocal.getUserId();
+
+		PortletItem portletItem = PortletItemLocalServiceUtil.updatePortletItem(
+			userId, groupId, name, portletId,
+			PortletPreferences.class.getName());
+
+		return new ArchivedSettingsImpl(portletItem);
+	}
+
+	@Override
 	public List<ArchivedSettings> getArchivedSettingsList(
 			long groupId, String portletId)
 		throws PortalException, SystemException {
-		
-		List<ArchivedSettings> archivedSettingsList = 
+
+		List<ArchivedSettings> archivedSettingsList =
 			new ArrayList<ArchivedSettings>();
-		
-		List<PortletItem> portletItems = 
+
+		List<PortletItem> portletItems =
 			PortletItemLocalServiceUtil.getPortletItems(
-				groupId, portletId, 
+				groupId, portletId,
 				com.liferay.portal.model.PortletPreferences.class.getName());
 
 		for (PortletItem portletItem : portletItems) {
 			archivedSettingsList.add(new ArchivedSettingsImpl(portletItem));
 		}
-		
+
 		return archivedSettingsList;
 	}
 

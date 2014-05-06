@@ -16,6 +16,7 @@ package com.liferay.portal.settings.archive;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+
 import java.util.List;
 
 /**
@@ -23,12 +24,12 @@ import java.util.List;
  */
 public interface ArchivedSettingsFactory {
 
+	public ArchivedSettings getArchivedSettings(
+			long groupId, String portletId, String name)
+		throws PortalException, SystemException;
+
 	public List<ArchivedSettings> getArchivedSettingsList(
 			long groupId, String portletId)
 		throws PortalException, SystemException;
 
-	public ArchivedSettings getArchivedSettings(
-			long groupId, String portletId, String name)
-		throws PortalException, SystemException;
-	
 }

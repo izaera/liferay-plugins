@@ -15,22 +15,33 @@
 package com.liferay.portal.settings.archive;
 
 import com.liferay.portal.settings.Settings;
+import com.liferay.portal.settings.UnmodifiableSettings;
+
 import java.io.IOException;
+
 import java.util.Date;
+
+import javax.portlet.ValidatorException;
 
 /**
  * @author Iván Zaera
  */
 public interface ArchivedSettings {
-	
-	public void delete() throws IOException;
 
-	public String getName();
+	public void delete() throws IOException;
 
 	public Date getModifiedDate();
 
-	public Settings getSettings() throws IOException;
+	public String getName();
+
+	public UnmodifiableSettings getSettings() throws IOException;
 
 	public String getUserName();
-	
+
+	public void restore(Settings targetSettings)
+		throws IOException, ValidatorException;
+
+	public void update(Settings sourceSettings)
+		throws IOException, ValidatorException;
+
 }
