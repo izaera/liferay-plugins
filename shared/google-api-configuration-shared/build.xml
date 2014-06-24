@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="google-drive-connector" basedir="." default="compile">
+<project name="google-api-configuration-shared" basedir="." default="compile">
 	<property name="plugin.version" value="1" />
 
 	<import file="../../build-common-osgi-plugin.xml" />
