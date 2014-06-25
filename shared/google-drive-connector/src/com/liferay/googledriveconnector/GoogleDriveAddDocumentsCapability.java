@@ -14,19 +14,12 @@
 
 package com.liferay.googledriveconnector;
 
-import com.liferay.portal.kernel.util.StreamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.googledriveconnector.util.OSGiUtil;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portlet.documentlibrary.connector.capabilities.BaseAddDocumentsCapability;
 import com.liferay.portlet.documentlibrary.connector.capabilities.DocumentType;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.net.URL;
-
 import java.util.regex.Pattern;
-
-import org.osgi.framework.FrameworkUtil;
 
 /**
  * @author Iván Zaera
@@ -47,29 +40,17 @@ public class GoogleDriveAddDocumentsCapability
 	protected String doGetFilePickerHTML(
 		DocumentType documentType, String callbackFunction) {
 
-		InputStream is = null;
+		String html = OSGiUtil.get(
+			getClass(), "com/liferay/googledriveconnector/FilePicker.html");
 
-		try {
-			URL entry = FrameworkUtil.getBundle(getClass()).getEntry(
-				"com/liferay/googledriveconnector/FilePicker.html");
-
-			is = entry.openStream();
-
-			String html = StringUtil.read(is);
-
-			return html.replaceAll(
-				Pattern.quote("[$$CALLBACK_FUNCTION$$]"), callbackFunction);
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		finally {
-			StreamUtil.cleanUp(is);
-		}
+		return html.replaceAll(
+			Pattern.quote("[$$CALLBACK_FUNCTION$$]"), callbackFunction);
 	}
 
 	@Override
 	protected void doProcessRequest(DocumentType documentType, String json) {
+		Object jsonObject = JSONFactoryUtil.deserialize(json);
+
 		System.out.println("=======> " + documentType+"\n"+json);
 	}
 
